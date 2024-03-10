@@ -1,95 +1,72 @@
-import Image from "next/image";
+"use client";
+
+import React from "react";
+import { useState, useEffect } from "react";
+
 import styles from "./page.module.css";
+import clsx from "clsx";
 
-export default function Home() {
+import { RinachanDataType } from "../../type";
+
+import rinachanData_ from "@/assets/data/emotion.json";
+const rinachanData: RinachanDataType = rinachanData_;
+
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+const Page = () => {
+  const [currentEmotion, setCurrentEmotion] = useState<string>("smile");
+  const [currentData, setCurrentData] = useState([]);
+
+  const [emotions, setEmotions] = useState<string[]>([]);
+
+  const rowArray: number[] = Array.from({ length: 13 }, (_, i) => i);
+  const columnArray: number[] = Array.from({ length: 20 }, (_, i) => i);
+
+  useEffect(() => {
+    setCurrentData(rinachanData[currentEmotion]);
+  }, [currentEmotion]);
+
+  // rinachanDataからemotionsを取得
+  useEffect(() => {
+    setEmotions(Object.keys(rinachanData));
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className={styles["root"]}>
+      still in dev... coming soon! <br />
+      <Select
+        value={currentEmotion}
+        onChange={(event) => setCurrentEmotion(event.target.value)}
+      >
+        {emotions.map((emotion) => (
+          <MenuItem key={emotion} value={emotion}>
+            {emotion}
+          </MenuItem>
+        ))}
+      </Select>
+      {currentData.length !== 0 && (
+        <div className={styles.container}>
+          {rowArray.map((row, rowIndex) => {
+            const currentRow: number[] = currentData[rowIndex];
+            return (
+              <>
+                {columnArray.map((column, columnIndex) => {
+                  const isPink: boolean = currentRow.includes(column);
+                  return (
+                    <span key={`${row}-${column}`}
+                      className={clsx(styles["cell"], isPink && styles["pink"])}
+                    >
+                    </span>
+                  );
+                })}
+              </>
+            )
+          })}
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      )}
+    </div>
   );
 }
+
+export default Page;
