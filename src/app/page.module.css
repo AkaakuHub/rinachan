@@ -1,16 +1,24 @@
 @charset "UTF-8";
 
-.root{
+.root {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .cell {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
   box-sizing: border-box;
+  width: 5vmin;
+  height: 5vmin;
 }
 
 .pink {
@@ -18,9 +26,24 @@
 }
 
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 600px;
-  height: 390px;
-  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(20, 5vmin);
+  gap: 0;
+  justify-content: center; /* この行を追加 */
+}
+
+.row {
+  display: contents;
+}
+
+.select {
+  width: 8em;
+}
+
+.input {
+  width: 5em;
+}
+
+.container-wrapper{
+  margin-top: 2em;
 }
